@@ -2,31 +2,25 @@
 //  BananaMeterApp.swift
 //  BananaMeter
 //
-//  Created by Apple on 29/12/2025.
+//  Created on 29/12/2025.
 //
 
 import SwiftUI
-import SwiftData
+import GoogleMobileAds
 
 @main
 struct BananaMeterApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+    
+    init() {
+        // Initialize AdMob safely after a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            MobileAds.shared.start { _ in }
         }
-    }()
-
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
     }
 }
