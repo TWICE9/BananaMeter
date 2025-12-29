@@ -10,6 +10,7 @@ import GoogleMobileAds
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
+    @State private var showSettings = false
     @State private var showARView = false
     @State private var animateBlobs = false
     @State private var rotateBanana = false
@@ -66,7 +67,7 @@ struct HomeView: View {
             
             VStack(spacing: 25) {
                 // MARK: - Header
-                HStack {
+                HStack(alignment: .bottom) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Welcome to")
                             .font(.system(size: 18, weight: .medium, design: .rounded))
@@ -77,7 +78,20 @@ struct HomeView: View {
                             .foregroundStyle(colorScheme == .dark ? Color(hex: "FFD93D") : .white)
                             .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 2)
                     }
+                    
                     Spacer()
+                    
+                    // MARK: - Settings Button
+                    Button(action: { showSettings = true }) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.title2)
+                            .foregroundColor(colorScheme == .dark ? .white : .black.opacity(0.7))
+                            .padding(10)
+                            .background(
+                                Circle()
+                                    .fill(.ultraThinMaterial)
+                            )
+                    }
                 }
                 .padding(.horizontal, 30)
                 .padding(.top, 20)
@@ -99,8 +113,10 @@ struct HomeView: View {
                         .frame(width: 220, height: 220)
                         .rotationEffect(.degrees(rotateBanana ? 360 : 0))
                     
-                    Text("🍌")
-                        .font(.system(size: 140))
+                    Image("bananalogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 150)
                         .scaleEffect(rotateBanana ? 1.1 : 0.9)
                         .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 10)
                 }
@@ -168,6 +184,9 @@ struct HomeView: View {
                 .padding(.horizontal, 30)
                 .padding(.bottom, 40)
             }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
         .fullScreenCover(isPresented: $showARView) {
             ARMeasurementView()
